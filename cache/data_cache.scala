@@ -1,0 +1,266 @@
+package examples
+
+import chisel3._
+import chisel3.stage._
+import chisel3.util._
+
+
+class data_cache  extends Module with mips_macros {
+        //完全没用到chisel真正好的地方，我是废物呜呜呜呜
+    val io = IO(new Bundle {
+        // axi
+        // ar
+        val port = new axi_ram_port
+        //val data_hit = Output(UInt(1.W))
+
+    })
+
+    val work_state = RegInit(0.U(5.W))
+    val write_counter  = RegInit(0.U(3.W))
+    val read_counter  = RegInit(0.U(3.W))
+    val wait_data  = RegInit(0.U(32.W))
+
+
+    val dcache_tag_0 = Module(new dcache_tag).io
+    val dcache_tag_1 = Module(new dcache_tag).io
+    val lru = RegInit(VecInit(Seq.fill(128)(0.U(1.W))))
+    val way0_dirty = RegInit(VecInit(Seq.fill(128)(0.U(1.W))))
+    val way1_dirty = RegInit(VecInit(Seq.fill(128)(0.U(1.W))))
+    val way0_wen =  Wire(Vec(8,UInt(1.W)))
+    val way1_wen =  Wire(Vec(8,UInt(1.W)))
+    val sram_addr_reg = RegInit(0.U(32.W))
+    val sram_cache_reg = RegInit(0.U(1.W))
+    val sram_wdata_reg = RegInit(0.U(32.W))
+    val sram_size_reg = RegInit(0.U(2.W))
+    val sram_wr_reg = RegInit(0.U(1.W))
+    // val sram_req_reg  = RegInit(0.U(1.W))
+    val access_cache_addr =  Mux(io.port.sram_req.asBool,io.port.sram_addr,sram_addr_reg)
+    val access_cache_size =  Mux(io.port.sram_req.asBool,io.port.sram_size,sram_size_reg)
+    val access_cache_wdata =  Mux(io.port.sram_req.asBool,io.port.sram_wdata,sram_wdata_reg)
+    val access_cache_wr =  Mux(io.port.sram_req.asBool,io.port.sram_wr,sram_wr_reg)    
+    val access_cache_state =  Mux(io.port.sram_req.asBool,io.port.sram_cache,sram_cache_reg)        
+    val dirty_victim = Wire(UInt(1.W))
+    val dcache_data_way0 =  VecInit(Seq.fill(8)(Module(new dcache_data).io))
+    val dcache_data_way1 =  VecInit(Seq.fill(8)(Module(new dcache_data).io))
+    val hit_0_reg       = RegInit(0.U(1.W))
+    val hit_1_reg       = RegInit(0.U(1.W))
+
+    val state_reset = "b00000".U;
+    val state_access_ram_read_0 = "b00001".U;
+    val state_access_ram_read_1 = "b00010".U;
+    val state_access_ram_write_0 = "b00011".U;
+    val state_access_ram_write_1 = "b00100".U;
+    val state_access_ram_write_2 = "b00101".U;
+    val state_data_ready = "b00110".U;
+    val state_lookup_read = "b00111".U;
+    val state_lookup_write = "b01000".U;
+    val state_miss_write_read_0 = "b01001".U;
+    val state_miss_write_read_1 = "b01010".U;
+    val state_miss_write_read_2 = "b01011".U;
+    val state_miss_access_ram_read_0 ="b01100".U;
+    val state_miss_access_ram_read_1 = "b01101".U;
+    val state_miss_read_update = "b01110".U;
+    val state_miss_write_write_0 = "b01111".U
+    val state_miss_write_write_1 = "b10000".U
+    val state_miss_write_write_2 = "b10001".U
+    val state_miss_access_ram_read_2 = "b10010".U
+    val state_miss_access_ram_read_3 = "b10011".U
+    val state_miss_write_update = "b10100".U
+
+    val dirty_victim_addr = Mux(io.port.sram_req.asBool,io.port.sram_addr,sram_addr_reg)
+   
+    sram_addr_reg := Mux(io.port.sram_req.asBool,io.port.sram_addr,sram_addr_reg)
+    sram_cache_reg := Mux(io.port.sram_req.asBool,io.port.sram_cache,sram_cache_reg)
+    sram_wdata_reg := Mux(io.port.sram_req.asBool,io.port.sram_wdata,sram_wdata_reg)
+    sram_size_reg  := Mux(io.port.sram_req.asBool,io.port.sram_size,sram_size_reg)
+    sram_wr_reg  := Mux(io.port.sram_req.asBool,io.port.sram_wr,sram_wr_reg)
+    // sram_req_reg := io.port.sram_req
+
+    way0_dirty(sram_addr_reg(11,5)) := Mux(work_state === state_lookup_write && dcache_tag_0.hit.asBool && dcache_tag_0.valid.asBool,1.U,
+        Mux(work_state === state_miss_read_update && lru(sram_addr_reg(11,5)) === 0.U,0.U,
+        Mux(work_state === state_miss_write_update &&lru(sram_addr_reg(11,5)) === 0.U,1.U,way0_dirty(sram_addr_reg(11,5)))))//告诉我有没有脏数据，只需要在这些情况进行更新
+
+    way1_dirty(sram_addr_reg(11,5)) := Mux(work_state === state_lookup_write && dcache_tag_1.hit.asBool && dcache_tag_1.valid.asBool,1.U,
+        Mux(work_state === state_miss_read_update && lru(sram_addr_reg(11,5)) === 1.U,0.U,
+        Mux(work_state === state_miss_write_update &&lru(sram_addr_reg(11,5)) === 1.U,1.U,way1_dirty(sram_addr_reg(11,5)))))
+
+    
+    dirty_victim := Mux(lru(dirty_victim_addr(11,5)) === 0.U,way0_dirty(dirty_victim_addr(11,5)),way1_dirty(dirty_victim_addr(11,5)))//index
+
+    dcache_tag_0.op  := 0.U
+    dcache_tag_1.op  := 0.U
+    dcache_tag_0.addr := access_cache_addr
+    dcache_tag_1.addr := access_cache_addr
+
+
+
+    
+    lru(sram_addr_reg(11,5)) := Mux(work_state === state_lookup_read || work_state === state_lookup_write,
+        Mux(dcache_tag_0.hit.asBool && dcache_tag_0.valid.asBool,1.U.asBool,
+        Mux(dcache_tag_1.hit.asBool && dcache_tag_1.valid.asBool,0.U.asBool,lru(sram_addr_reg(11,5)) )),
+        Mux(work_state === state_miss_read_update||work_state === state_miss_write_update,~lru(sram_addr_reg(11,5)),  lru(sram_addr_reg(11,5))))
+    
+    val hit = (dcache_tag_0.hit.asBool && dcache_tag_0.valid.asBool) ||
+        (dcache_tag_1.hit.asBool && dcache_tag_1.valid.asBool)
+    hit_0_reg := dcache_tag_0.hit.asBool && dcache_tag_0.valid.asBool
+    hit_1_reg := dcache_tag_1.hit.asBool && dcache_tag_1.valid.asBool 
+    // work_state := Mux(work_state === state_reset,Mux(io.port.sram_req.asBool,Mux(io.port.sram_wr.asBool,
+    //         Mux(io.port.sram_cache.asBool,state_lookup_write,state_access_ram_write_0),Mux(io.port.sram_cache.asBool,state_lookup_read,state_access_ram_read_0)),work_state),
+    //     Mux(work_state === state_access_ram_read_0 && io.port.arready.asBool,state_access_ram_read_1,
+    //     Mux(work_state === state_access_ram_read_1 && io.port.rvalid.asBool,state_data_ready,
+    //     Mux(work_state === state_data_ready,Mux(io.port.sram_req.asBool,Mux(io.port.sram_wr.asBool,
+    //         Mux(io.port.sram_cache.asBool,state_lookup_write,state_access_ram_write_0),Mux(io.port.sram_cache.asBool,state_lookup_read,state_access_ram_read_0)),state_reset),
+    //     Mux(work_state === state_access_ram_write_0 && io.port.awready.asBool,state_access_ram_write_1 ,
+    //     Mux(work_state === state_access_ram_write_1 && io.port.wready.asBool,state_access_ram_write_2,
+    //     Mux(work_state === state_access_ram_write_2 , state_data_ready,
+    //     Mux(work_state === state_lookup_read , Mux(hit,Mux(io.port.sram_req.asBool,Mux(io.port.sram_wr.asBool,
+    //         Mux(io.port.sram_cache.asBool,state_lookup_write,state_access_ram_write_0),Mux(io.port.sram_cache.asBool,state_lookup_read,state_access_ram_read_0)),work_state),
+    //         Mux(dirty_victim.asBool,state_miss_write_read_0,state_miss_access_ram_read_0)),
+    //     Mux(work_state === state_miss_access_ram_read_0/* && io.port.arready.asBool*/,state_miss_access_ram_read_1,
+    //     Mux(work_state === state_miss_access_ram_read_1,Mux(io.port.rlast.asBool && io.port.rvalid.asBool,state_miss_read_update,work_state),
+    //     Mux(work_state === state_miss_read_update,state_data_ready,
+    //     Mux(work_state === state_miss_write_read_0 && io.port.awready.asBool,state_miss_write_read_1,
+    //     Mux(work_state === state_miss_write_read_1 && io.port.wready.asBool,Mux(write_counter === "b111".U,state_miss_write_read_2,work_state),
+    //     Mux(work_state === state_miss_write_read_2 && io.port.bvalid.asBool,state_miss_access_ram_read_0,
+    //     Mux(work_state === state_lookup_write,Mux(hit,state_data_ready,Mux(dirty_victim.asBool,state_miss_write_write_0,state_miss_access_ram_read_2)),
+    //     Mux(work_state === state_miss_access_ram_read_2 && io.port.arready.asBool,state_miss_access_ram_read_2,
+    //     Mux(work_state === state_miss_access_ram_read_3 ,Mux(io.port.rlast.asBool && io.port.rvalid.asBool,state_miss_write_update,work_state),
+    //     Mux(work_state === state_miss_write_update,state_data_ready,
+    //     Mux(work_state === state_miss_write_write_0 && io.port.awready.asBool,state_miss_write_write_1,
+    //     Mux(work_state === state_miss_write_write_1 && io.port.wready.asBool && write_counter === "b111".U,state_miss_write_write_2,
+    //     Mux(work_state === state_miss_write_write_2 && io.port.bvalid.asBool,state_miss_access_ram_read_2,work_state)))))))))))))))))))))
+
+    work_state := MuxLookup(work_state,work_state,Seq(
+        state_reset -> Mux(io.port.sram_req.asBool,Mux(io.port.sram_wr.asBool,
+            Mux(access_cache_state.asBool,state_lookup_write,state_access_ram_write_0),Mux(access_cache_state.asBool,state_lookup_read,state_access_ram_read_0)),work_state),
+        state_access_ram_read_0 -> Mux(io.port.arready.asBool, state_access_ram_read_1,work_state),
+        state_access_ram_read_1 -> Mux(io.port.rvalid.asBool,state_data_ready,work_state),
+        state_data_ready        -> Mux(io.port.sram_req.asBool,Mux(io.port.sram_wr.asBool,
+            Mux(access_cache_state.asBool,state_lookup_write,state_access_ram_write_0),Mux(access_cache_state.asBool,state_lookup_read,state_access_ram_read_0)),state_reset),
+        state_access_ram_write_0-> Mux(io.port.awready.asBool,state_access_ram_write_1,work_state),
+        state_access_ram_write_1-> Mux(io.port.wready.asBool,state_access_ram_write_2,work_state),
+        state_access_ram_write_2-> state_data_ready,
+        state_lookup_read       -> Mux(hit,Mux(io.port.sram_req.asBool,Mux(io.port.sram_wr.asBool,
+            Mux(access_cache_state.asBool,state_lookup_write,state_access_ram_write_0),Mux(access_cache_state.asBool,state_lookup_read,state_access_ram_read_0)),work_state),
+            Mux(!access_cache_state.asBool,Mux(io.port.sram_wr.asBool,state_access_ram_write_0,state_access_ram_read_0),Mux(dirty_victim.asBool,state_miss_write_read_0,Mux(io.port.sram_wr.asBool,state_miss_access_ram_read_2,state_miss_access_ram_read_0)))),
+        state_miss_access_ram_read_0 -> Mux(io.port.arready.asBool,state_miss_access_ram_read_1,work_state),
+        state_miss_access_ram_read_1 -> Mux(io.port.rlast.asBool && io.port.rvalid.asBool,Mux(sram_wr_reg.asBool,state_miss_write_update,state_miss_read_update),work_state),
+        state_miss_read_update    -> state_data_ready,
+        state_miss_write_read_0   -> Mux(io.port.awready.asBool,state_miss_write_read_1,work_state),
+        state_miss_write_read_1   -> Mux(io.port.wready.asBool && write_counter === "b111".U,state_miss_write_read_2,work_state),
+        state_miss_write_read_2   -> Mux(io.port.bvalid.asBool,state_miss_access_ram_read_0,work_state),
+        state_lookup_write      -> Mux(hit,state_data_ready,Mux(dirty_victim.asBool,state_miss_write_write_0,state_miss_access_ram_read_2)),
+        state_miss_access_ram_read_2 -> Mux(io.port.arready.asBool,state_miss_access_ram_read_3,work_state),
+        state_miss_access_ram_read_3 -> Mux(io.port.rvalid.asBool  && io.port.rlast.asBool,state_miss_write_update,work_state),
+        state_miss_write_update   -> state_data_ready,
+        state_miss_write_write_0  -> Mux(io.port.awready.asBool,state_miss_write_write_1,work_state),
+        state_miss_write_write_1  -> Mux(io.port.wready.asBool && write_counter === "b111".U , state_miss_write_write_2,work_state),
+        state_miss_write_write_2  -> Mux(io.port.bvalid.asBool,state_miss_access_ram_read_2,work_state)))
+       
+
+    wait_data := Mux(work_state === state_access_ram_read_1 && io.port.rvalid.asBool,io.port.rdata,
+        Mux(work_state === state_miss_access_ram_read_1 && io.port.rvalid.asBool && read_counter === sram_addr_reg(4,2),io.port.rdata,wait_data))
+    
+    write_counter := Mux(work_state === state_miss_write_read_1,Mux(io.port.wready.asBool,Mux(write_counter === "b111".U,0.U,write_counter+1.U),write_counter),
+        Mux(work_state === state_miss_write_write_1,Mux(io.port.wready.asBool,Mux(write_counter === "b111".U,0.U,write_counter+1.U),write_counter),write_counter))
+    read_counter := Mux(work_state === state_miss_access_ram_read_1,Mux(io.port.rvalid.asBool && io.port.rlast.asBool, 0.U, Mux(io.port.rvalid.asBool,read_counter+1.U,read_counter )),
+        Mux(work_state === state_miss_access_ram_read_3,Mux(io.port.rvalid.asBool && io.port.rlast.asBool, 0.U, Mux(io.port.rvalid.asBool,read_counter+1.U,read_counter )),read_counter))
+//受到的数据
+    val word_selection0 = dcache_data_way0(sram_addr_reg(4,2)).rdata
+    val word_selection1 = dcache_data_way1(sram_addr_reg(4,2)).rdata
+
+    val wb_word0 = dcache_data_way0(write_counter).rdata
+    val wb_word1 = dcache_data_way1(write_counter).rdata
+    val wen_way0_wire = Wire(Vec(8,(UInt(4.W))))
+    val wen_way1_wire = Wire(Vec(8,(UInt(4.W))))
+
+    val writeback_data = Mux(lru(sram_addr_reg(11,5)).asBool,wb_word1,wb_word0)
+    val way0_burst_read_wen = (work_state === state_miss_access_ram_read_1 || work_state === state_miss_access_ram_read_3) && io.port.rvalid.asBool && lru(sram_addr_reg(11,5)) === 0.U
+    val way1_burst_read_wen = (work_state === state_miss_access_ram_read_1 || work_state === state_miss_access_ram_read_3) && io.port.rvalid.asBool && lru(sram_addr_reg(11,5)) === 1.U
+    for(i <- 0 to 7 ) {
+        dcache_data_way0(i).addr := access_cache_addr
+        dcache_data_way0(i).wdata := Mux(work_state === state_miss_write_update ||work_state === state_lookup_write ,access_cache_wdata,Mux(work_state === state_miss_access_ram_read_1 ||work_state === state_miss_access_ram_read_3,io.port.rdata,0.U))
+        dcache_data_way0(i).en := 1.U
+        dcache_data_way0(i).wen := wen_way0_wire(i)
+        dcache_data_way1(i).addr := access_cache_addr
+        dcache_data_way1(i).wdata := Mux(work_state === state_miss_write_update ||work_state === state_lookup_write,access_cache_wdata,Mux(work_state === state_miss_access_ram_read_1 ||work_state === state_miss_access_ram_read_3,io.port.rdata,0.U))
+        dcache_data_way1(i).en := 1.U
+        dcache_data_way1(i).wen := wen_way1_wire(i)   
+    }
+
+    for(i <- 0 to 7) {
+        wen_way0_wire(i) :=  Mux( access_cache_addr(4,2) === i.asUInt && ((work_state === state_lookup_write && dcache_tag_0.hit.asBool && dcache_tag_0.valid.asBool)||
+            (work_state === state_miss_write_update  && lru(access_cache_addr(11,5)) === 0.U)),get_wstrb(access_cache_size,access_cache_addr(1,0)),Cat(Seq.fill(4)(way0_wen(i))))
+        wen_way1_wire(i) :=  Mux( access_cache_addr(4,2) === i.asUInt && ((work_state === state_lookup_write && dcache_tag_1.hit.asBool && dcache_tag_1.valid.asBool)||
+            (work_state === state_miss_write_update  && lru(access_cache_addr(11,5)) === 1.U)),get_wstrb(access_cache_size,access_cache_addr(1,0)),Cat(Seq.fill(4)(way1_wen(i))))
+    }
+    for(i <- 0 to 7) {
+        way0_wen(i)  := Mux(i.asUInt === read_counter,way0_burst_read_wen ,0.U) 
+        way1_wen(i)  := Mux(i.asUInt === read_counter,way1_burst_read_wen ,0.U) 
+    }
+ 
+
+   
+   
+    val cache_wdata = Mux(work_state === state_miss_access_ram_read_1 || work_state === state_miss_access_ram_read_3,io.port.rdata,
+        Mux(work_state === state_lookup_write || work_state === state_lookup_read,sram_wdata_reg,0.U))
+    val hit_word = Mux((hit_0_reg.asBool ),word_selection0,
+        Mux(hit_1_reg .asBool,word_selection1,0.U))
+    
+    dcache_tag_0.wen := Mux((work_state === state_miss_access_ram_read_1 ||work_state === state_miss_access_ram_read_3 ) && lru(sram_addr_reg(11,5)) === 0.U,1.U,0.U)
+    dcache_tag_1.wen := Mux((work_state === state_miss_access_ram_read_1 ||work_state === state_miss_access_ram_read_3 ) && lru(sram_addr_reg(11,5)) === 1.U,1.U,0.U)//最近使用的是cache 0
+    dcache_tag_0.wdata := Mux((work_state === state_miss_access_ram_read_1 ||work_state === state_miss_access_ram_read_3 ) ,Cat(1.U(1.W),sram_addr_reg(31,12)),0.U)
+    dcache_tag_1.wdata := Mux((work_state === state_miss_access_ram_read_1 ||work_state === state_miss_access_ram_read_3 ) ,Cat(1.U(1.W),sram_addr_reg(31,12)),0.U)
+      
+    //axi signal
+// r 读数据通道
+    io.port.rready := 1.U
+// ar 读地址通道
+    io.port.arid := 0.U
+    io.port.araddr := Mux(work_state === state_access_ram_read_0,Cat(sram_addr_reg(31,2),0.U(2.W)),
+        Mux(work_state === state_miss_access_ram_read_0 || work_state === state_miss_access_ram_read_2,Cat(sram_addr_reg(31,5),0.U(5.W)),0.U))
+    io.port.arlen  := Mux(access_cache_state.asBool,"b111".U,0.U)
+    io.port.arsize := "b010".U
+    io.port.arburst := Mux(access_cache_state.asBool,1.U,0.U)
+    io.port.arlock  := 0.U
+    io.port.arcache := 0.U
+    io.port.arprot  := 0.U
+    io.port.arvalid := Mux(work_state === state_access_ram_read_0 || work_state === state_miss_access_ram_read_0 ||
+        work_state === state_miss_access_ram_read_2,1.U,0.U)
+    io.port.rready  := 1.U
+// aw 写地址通道
+    io.port.awid    := "b0000".U
+    io.port.awaddr  := MuxLookup(work_state,0.U,Seq(
+        state_access_ram_write_0 -> Cat(sram_addr_reg(31,2),0.U(2.W)),
+        state_miss_write_read_0 ->  Cat(Mux(lru(sram_addr_reg(11,5)) === 0.U,dcache_tag_0.tag,dcache_tag_1.tag),sram_addr_reg(11,5),0.U(5.W)),
+        state_miss_write_write_0 -> Cat(Mux(lru(sram_addr_reg(11,5)) === 0.U,dcache_tag_0.tag,dcache_tag_1.tag),sram_addr_reg(11,5),0.U(5.W))//脏数据写回
+    ))
+    io.port.awlen   := Mux(access_cache_state.asBool,"b111".U,0.U)
+    io.port.awsize  := "b010".U
+    io.port.awburst := Mux(access_cache_state.asBool,"b01".U,0.U)
+    io.port.awlock  := "b00".U
+    io.port.awcache := "b0000".U // _0握手
+    io.port.awprot  := "b000".U
+    io.port.awvalid := Mux(work_state === state_access_ram_write_0 || work_state ===state_miss_write_write_0 || work_state === state_miss_write_read_0,1.U,0.U)
+// w 写数据通道
+    io.port.wid    := "b0000".U //_1 传输数据，第三个周期即可受到数据
+    io.port.wdata  := Mux(work_state === state_access_ram_write_1,sram_wdata_reg,Mux(work_state === state_miss_write_read_1 ||
+        work_state === state_miss_write_write_1,writeback_data ,0.U))
+    io.port.wstrb  := Mux(work_state === state_access_ram_write_1,get_wstrb(sram_size_reg,sram_addr_reg(1,0)),Mux(work_state === state_miss_write_read_1 ||
+        work_state === state_miss_write_write_1,"b1111".U ,0.U))
+    io.port.wlast  := work_state === state_access_ram_write_1 || ((work_state === state_miss_write_read_1 || work_state === state_miss_write_write_1 ) 
+        && write_counter === "b111".U )
+    io.port.wvalid := work_state === state_access_ram_write_1 || work_state === state_miss_write_read_1 || work_state === state_miss_write_write_1 
+//  b 写应答
+    io.port.bready := 1.U
+//sram like
+    io.port.sram_addr_ok := 1.U
+    io.port.sram_data_ok := Mux(work_state === state_data_ready && !io.port.sram_req.asBool,1.U,Mux(((work_state === state_lookup_read && !access_cache_wr.asBool) || (work_state === state_lookup_write && access_cache_wr.asBool)),hit,0.U))
+    io.port.sram_rdata := Mux(work_state === state_data_ready,wait_data,Mux(work_state === state_lookup_read,hit_word,0.U))
+
+}
+object data_cache_test extends App{
+    (new ChiselStage).emitVerilog(new data_cache)
+}
+
+
