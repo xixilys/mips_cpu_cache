@@ -35,7 +35,7 @@ class br extends Module with mips_macros { //应该就是在id时就开始准备
     io.exe := io.en.asBool && !reset.asBool && ((result & io.branch) =/= 0.U)
 }
 
-object br_test extends App{
-    (new ChiselStage).emitVerilog(new br)
-}
+// object br_test extends App{
+//     (new ChiselStage).emitVerilog(new br)
+// }
 

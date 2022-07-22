@@ -208,7 +208,7 @@ class id2ex extends Module with mips_macros{ //觉得除法器那一块有很多
     io.BadVaddrE  := BadVaddrE_Reg 
 }
 
-object id2ex_test extends App{
-    (new ChiselStage).emitVerilog(new id2ex)
-}
+// object id2ex_test extends App{
+//     (new ChiselStage).emitVerilog(new id2ex)
+// }
 

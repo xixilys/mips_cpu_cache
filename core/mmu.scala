@@ -38,7 +38,7 @@ class mmu extends Module with mips_macros {//
     // val   d_paddr_Reg = RegInit(0.U(32.W))
     // val   d_cached_Reg = RegInit(0.U(1.W))
     // val   d_unaligned_Reg = RegInit(0.U(1.W)) 
-    io.i_paddr := Mux(io.i_en.asBool,memory_mapping(io.i_vaddr),Cat(0xbfc0.U(16.W),0x0000.U(16.W)))//i_paddr_Reg
+    io.i_paddr := Mux(io.i_en.asBool,memory_mapping(io.i_vaddr),Cat(0x1fc0.U(16.W),0x0000.U(16.W)))//i_paddr_Reg
     io.d_paddr := Mux(io.d_clr.asBool,0.U,Mux(io.d_en.asBool,memory_mapping(io.d_vaddr),0.U))
     io.i_cached := Mux(io.i_en.asBool,check_cached(io.i_vaddr),0.U)//i_cached_Reg
     io.d_cached := Mux(io.d_clr.asBool,0.U,Mux(io.d_en.asBool,check_cached(io.d_vaddr),0.U))//d_cached_Reg
@@ -52,8 +52,8 @@ class mmu extends Module with mips_macros {//
     // d_cached_Reg :=  Mux(io.d_clr.asBool,0.U,Mux(io.d_en.asBool,check_cached(io.d_vaddr),d_paddr_Reg))
     // d_unaligned_Reg := Mux(io.d_clr.asBool,0.U,Mux(io.d_en.asBool,Mux(io.d_vaddr(1,0)===0.U,0.U,1.U),d_unaligned_Reg))//指令恒为4字节
 } 
-object mmu_test extends App{
-    (new ChiselStage).emitVerilog(new mmu)
-}
+// object mmu_test extends App{
+//     (new ChiselStage).emitVerilog(new mmu)
+// }
 
 

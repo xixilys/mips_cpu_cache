@@ -38,6 +38,30 @@ class signed_div extends BlackBox{
 
 }
 
+class unsigned_mul extends BlackBox{
+
+    val io = IO(new Bundle {
+        val CLK = Input(Clock())
+        val A  = Input(UInt(32.W))
+        val B  = Input(UInt(32.W))
+        val CE = Input(UInt(1.W))
+        val P  = Output(UInt(64.W))
+  })
+
+}
+
+class signed_mul extends BlackBox{
+
+    val io = IO(new Bundle {
+        val CLK = Input(Clock())
+        val A  = Input(UInt(32.W))
+        val B  = Input(UInt(32.W))
+        val CE = Input(UInt(1.W))
+        val P  = Output(UInt(64.W))
+  })
+}
+
+
 class muldiv extends Module with mips_macros{ //觉得除法器那一块有很多可以改的东西，但是怕改了出问题，还是不要改了吧
 
     val io = IO(new Bundle { //有隐式的时钟与复位，并且复位为高电平复位
@@ -82,10 +106,13 @@ class muldiv extends Module with mips_macros{ //觉得除法器那一块有很�
    // val divisor_Reg = RegInit(0.U(32.W))//除数
     val dividend_Reg = Wire(UInt(32.W))
    // val dividend_Reg = RegInit(0.U(32.W))//被除数
-
+    val mul_A = Mux(io.en.asBool,io.in1,0.U)
+    val mul_B = Mux(io.en.asBool,io.in2,0.U)
 
     divisor_Reg := Mux(io.en.asBool,io.in2,0.U)//这地方写的我就是沙比，如果真的是寄存器的 话
     dividend_Reg := Mux(io.en.asBool,io.in1,0.U)//这地方写的我就是沙比
+
+    
 
     val divu_answer  = Wire(UInt(64.W))
     val div_answer  = Wire(UInt(64.W))
@@ -111,79 +138,40 @@ class muldiv extends Module with mips_macros{ //觉得除法器那一块有很�
     a := Mux(counter_Reg.asBool,Mux(a === limit,0.U,(a+1.U)),0.U)
     b := Mux(a === limit,1.U,0.U)
 
+    val mul_counter_Reg = RegInit(0.U.asBool)
+    val a_mul = RegInit(0.U(32.W))
+    val b_mul = RegInit(0.U(1.W))
+    val limit_mul = Wire(UInt(32.W))
+    val mul_counter_enable = io.en.asBool &&  (io.ctrl(2) || io.ctrl(3))
+      
+    limit_mul := 5.U
+    a_mul := Mux(mul_counter_enable.asBool,Mux(a_mul === limit_mul - 1.U,0.U,(a_mul + 1.U)),0.U)
+    b_mul := Mux(a_mul === limit_mul - 1.U,0.U,1.U)
+
    // io.b := b
     when(io.en.asBool && !counter_Reg.asBool) {
         when(io.ctrl(0) ) {
-            // divisor_Reg := io.in2
-            // dividend_Reg := io.in1
             when(in1_ready.asBool) {
                 counter_Reg := 1.U
             }
-            // in1_valid := 1.U
-            // in2_valid := 1.U
-            // pending_Reg := 1.U
         }.elsewhen(io.ctrl(1)){ 
-            // divisor_Reg := io.in2
-            // dividend_Reg := io.in1
             when(in1_ready_u.asBool) {
-                // pending_Reg := 1.U
                 counter_Reg:= 1.U
             }
-            // in1_valid_u := 1.U
-            // in2_valid_u := 1.U
-            // pending_Reg := 1.U
         }
     }.otherwise{
-        // when(pending_Reg.asBool && in1_ready.asBool && in2_ready.asBool) {
-        //     in1_valid := 0.U
-        //     in2_valid := 0.U
-        // }
-        // when(pending_Reg.asBool && in1_ready_u.asBool && in2_ready_u.asBool) {
-        //     in1_valid_u := 0.U
-        //     in2_valid_u := 0.U
-        // }
         when(b.asBool) {
-            // pending_Reg := 0.U
+
             counter_Reg := 0.U
-            // in1_valid := 0.U
-            // in2_valid := 0.U
-            // in1_valid_u := 0.U
-            // in2_valid_u := 0.U
 
         }
 
     }
-    io.pending := Mux(io.en.asBool && (io.ctrl(0) || io.ctrl(1) ),Mux(last_counter_Reg === 1.U && counter_Reg === 0.U,0.U,1.U),0.U)
+    io.pending := Mux(io.en.asBool && (io.ctrl(0) || io.ctrl(1) ),Mux(last_counter_Reg === 1.U && counter_Reg === 0.U,0.U,1.U),
+        Mux(io.en.asBool && (io.ctrl(2)|| io.ctrl(3)),b_mul,0.U))
 
 
-    // divisor_Reg  := Mux(div_en_tag,io.in2,divisor_Reg ) // 二选一多路器 
-    // dividend_Reg := Mux(div_en_tag,io.in1,dividend_Reg ) // 二选一多路器
 
-    // in1_valid := MuxCase(0.U,Seq(
-    //     (io.ctrl(0)  && div_en_tag && in1_ready.asBool) -> 1.U,
-    //     in1_valid.asBool -> 0.U
-    //     // in1_ready.asBool -> 0.U
-    // )) 
-    // in2_valid := MuxCase(0.U,Seq(
-    //     (io.ctrl(0)  && div_en_tag&& in2_ready.asBool) -> 1.U,
-    //     in2_valid.asBool -> 0.U
-    // )) 
-
-    // in1_valid_u := MuxCase(in1_valid_u,Seq(
-    //     (io.ctrl(1)  && div_en_tag) -> 1.U,
-    //     in1_ready_u.asBool -> 0.U
-    // )) 
-    // in2_valid_u := MuxCase(in1_valid_u,Seq(
-    //     (io.ctrl(1)  && div_en_tag) -> 1.U,
-    //     in1_ready_u.asBool -> 0.U
-    // )) 
-
-    // pending_Reg := MuxCase(pending_Reg,Seq(
-    //     (io.en === 0.U) -> 0.U,
-    //     //(div_en_tag &&( io.ctrl(0) === 1.U || io.ctrl(1) === 1.U)) -> 1.U,
-    //     ( ( in1_valid) === 1.U ||( in1_valid_u) === 1.U ) -> 1.U,
-    //     (divu_output_valid.asBool || div_output_valid.asBool) ->  0.U
-    // )) 
 
     io.lo := Mux1H(Seq(
         io.ctrl(0) -> div_answer(63,32),
@@ -223,13 +211,29 @@ class muldiv extends Module with mips_macros{ //觉得除法器那一块有很�
     div_answer :=  _div.io.m_axis_dout_tdata
     div_output_valid :=  _div.io.m_axis_dout_tvalid
 
-    mulu_answer := io.in1 * io.in2
-    mul_answer := (io.in1.asSInt * io.in2.asSInt).asUInt
+    val _mul = Module(new signed_mul)
+    _mul.io.A  :=  mul_A
+    _mul.io.B  :=  mul_B
+    _mul.io.CLK := clock    
+    _mul.io.CE :=  mul_counter_enable
+    mul_answer := _mul.io.P
+
+
+
+
+    val _umul = Module(new unsigned_mul)
+    _umul.io.A  :=  mul_A
+    _umul.io.B  :=  mul_B
+    _umul.io.CLK := clock    
+    _umul.io.CE := mul_counter_enable
+    mulu_answer := _umul.io.P
+    // mulu_answer := io.in1 * io.in2
+    // mul_answer := (io.in1.asSInt * io.in2.asSInt).asUInt
 
   
 }
 
-object muldiv_test extends App{
-    (new ChiselStage).emitVerilog(new muldiv )
-}
+// object muldiv_test extends App{
+//     (new ChiselStage).emitVerilog(new muldiv )
+// }
 

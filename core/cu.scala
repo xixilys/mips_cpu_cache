@@ -71,7 +71,10 @@ class cu_1 extends Module with mips_macros {
     val RsD    = io1.InstrD(25,21)
     val RtD    = io1.InstrD(20,16)
     val ins_id = Wire(UInt(64.W))
+
     // io.BranchD_Flag := Mux(OpD === )
+// 专门对分支指令写一个解码
+
     ins_id := MuxLookup(OpD,1.U<<ID_NULL,Seq(
         ( OP_ADDI) -> (1.U<<ID_ADDI),
         ( OP_ANDI) -> (1.U<<ID_ANDI),
@@ -324,8 +327,58 @@ class cu extends Module with mips_macros {
     val RsD    = io1.InstrD(25,21)
     val RtD    = io1.InstrD(20,16)
     val ins_id = Wire(UInt(7.W))
+    val branch_id = Wire(UInt(7.W))
+    branch_id := MuxLookup(OpD,0.U,Seq(  
+        OP_BEQ  -> (ID_BEQ).U,
+        OP_BNE  -> (ID_BNE.U ),
+        OP_BGTZ -> (ID_BGTZ.U),
+        OP_BLEZ -> (ID_BLEZ).U,
+        OP_J    -> (ID_J.U ),
+        OP_JAL  -> (ID_JAL.U),
+        OP_REGIMM -> MuxLookup(RtD,ID_NULL.U,Seq( //后面这里可以改,在id时就开始算分支
+            RT_BGEZ   -> ID_BGEZ.U,
+            RT_BGEZAL -> ID_BGEZAL.U,
+            RT_BLTZ   -> ID_BLTZ.U,
+            RT_BLTZAL -> ID_BLTZAL.U)),
+        OP_SPECIAL -> MuxLookup(FunctD,ID_NULL.U,Seq( 
+            FUNC_JR   ->   (ID_JR).U,
+            FUNC_JALR ->   (ID_JALR.U)
+       ))))
 
+    io.BranchD_Flag := MuxLookup(ins_id,0.U,Seq(
+        ID_BEQ.U    -> 1.U,
+        ID_BNE    .U-> 1.U,
+        ID_BGEZ   .U-> 1.U,
+        ID_BGEZAL .U-> 1.U,
+        ID_BGTZ   .U-> 1.U,
+        ID_BLEZ   .U-> 1.U,
+        ID_BLTZ   .U-> 1.U,
+        ID_BLTZAL .U-> 1.U
+    ))
 
+    io.BranchD   := MuxLookup(branch_id,0.U,Seq(
+        ID_BEQ    .U-> "b000001".U,
+        ID_BNE    .U-> "b000010".U,
+        ID_BGEZ   .U-> "b000100".U,
+        ID_BGEZAL .U-> "b000100".U,
+        ID_BGTZ   .U-> "b001000".U,
+        ID_BLEZ   .U-> "b010000".U,
+        ID_BLTZ   .U-> "b100000".U,
+        ID_BLTZAL .U-> "b100000".U
+    ))
+    io.JumpD     := MuxLookup(branch_id,0.U,Seq(
+        ID_J     .U-> 1.U,
+        ID_JAL   .U-> 1.U,
+        ID_JALR  .U-> 1.U,
+        ID_JR    .U-> 1.U ))
+    io.JRD       := MuxLookup(branch_id,0.U,Seq(
+        ID_JALR  .U -> 1.U,
+        ID_JR    .U -> 1.U ))
+    io.LinkD     := MuxLookup(branch_id,0.U,Seq(
+        ID_BGEZAL .U -> 1.U,
+        ID_BLTZAL .U -> 1.U,
+        ID_JALR   .U -> 1.U,
+        ID_JAL    .U -> 1.U))
     // io.BranchD_Flag := Mux(OpD === )
     ins_id := MuxLookup(OpD,ID_NULL.U,Seq(
         ( OP_ADDI) -> (ID_ADDI).U,
@@ -397,7 +450,7 @@ class cu extends Module with mips_macros {
         ))
 
     ))
-
+    
     io1.BadInstrD := ins_id === (ID_NULL ).U
     io1.BreakD    := ins_id === (ID_BREAK).U
     io1.SysCallD  := ins_id === (ID_SYSCALL).U
@@ -405,15 +458,15 @@ class cu extends Module with mips_macros {
 
     val get_controls = Wire(UInt(29.W))
     io.MemRLD       := get_controls(28,27)
-    io.BranchD_Flag := get_controls(26)
+    // io.BranchD_Flag := get_controls(26)
     io.RegWriteD := get_controls(25)   //实在不知道咋写呜呜呜
     io.RegDstD   := get_controls(24,23) 
     io.ALUSrcD   := get_controls(22,21)
     io.ImmUnsigned := get_controls(20) 
-    io.BranchD   := get_controls(19,14)
-    io.JumpD     := get_controls(13)
-    io.JRD       := get_controls(12) 
-    io.LinkD     := get_controls(11)
+    // io.BranchD   := get_controls(19,14)
+    // io.JumpD     := get_controls(13)
+    // io.JRD       := get_controls(12) 
+    // io.LinkD     := get_controls(11)
     io.HiLoWriteD:= get_controls(10,9)
     io.HiLoToRegD := get_controls(8,7)
     io.CP0WriteD  := get_controls(6)
@@ -557,8 +610,8 @@ class cu extends Module with mips_macros {
 }
 
 
-object cu1_test extends App{
-    (new ChiselStage).emitVerilog(new cu_1)
-}
+// object cu1_test extends App{
+//     (new ChiselStage).emitVerilog(new cu_1)
+// }
 
 

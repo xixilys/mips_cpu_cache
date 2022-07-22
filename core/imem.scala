@@ -33,8 +33,8 @@ class imem extends Module with mips_macros { //数据mem
 }
 
 
-object imem_test extends App{
-    (new ChiselStage).emitVerilog(new imem)
-}
+// object imem_test extends App{
+//     (new ChiselStage).emitVerilog(new imem)
+// }
 
 

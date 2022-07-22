@@ -34,6 +34,6 @@ class regfile extends Module {
     ))   
 }
 
-object regfile_test extends App{
-    (new ChiselStage).emitVerilog(new regfile )
-}
+// object regfile_test extends App{
+//     (new ChiselStage).emitVerilog(new regfile )
+// }

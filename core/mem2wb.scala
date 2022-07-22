@@ -114,7 +114,7 @@ class mem2wb extends Module with mips_macros {//
     
 }
 
-object mem2wb_test extends App{
-    (new ChiselStage).emitVerilog(new mem2wb)
-}
+// object mem2wb_test extends App{
+//     (new ChiselStage).emitVerilog(new mem2wb)
+// }
 

@@ -37,6 +37,8 @@ val OP_SPECIAL = "b000000".U(6.W)
 val OP_BRANCH = "b000001".U(6.W)
 val OP_PRIVILEGE = "b010000".U(6.W)
 val OP_SPECIAL2 = "b011100".U(6.W)
+val OP_CACHE = "b101111".U(6.W) //cache指令，后面应该是只实现了其中几个，后续仔细讨论
+val OP_REGIMM = "b000001".U(6.W)
 
 
 val FUNC_ADD = "b100000".U(6.W)
@@ -75,6 +77,9 @@ val RS_ERET = "b10000".U(5.W)
 val FULL_ERET =  "b01000010_00000000_00000000_00011000".U(32.W)
 val RS_MFC0 = "b00000".U(5.W)
 val RS_MTC0 = "b00100".U(5.W)
+
+
+
 
 
 // // inst_type id def    "b00_10".U -> Cat(0.U(16.W),data(15,0)),
@@ -155,8 +160,8 @@ val ALU_ADD  = 1
 val ALU_ADDE = 2
 val ALU_ADDU = 3
 val ALU_AND  = 4
-val ALU_DIV = 5
-val ALU_DIVU= 6
+val ALU_DIV  = 5
+val ALU_DIVU = 6
 val ALU_LUI  = 7
 val ALU_MULT = 8
 val ALU_MULTU= 9
@@ -299,5 +304,28 @@ def get_wstrb(sram_size:UInt,sram_addr:UInt) = {
         "b0110".U -> "b1100".U
     ))
 }
-         
+//输入最好为4的整数倍
+def Hash(num:UInt) : UInt  = {
+  val length = num.getWidth 
+  val num_array = Wire(Vec((length/4),UInt(1.W)))
+  for(i <- 0 to (length/4)-1) {
+    num_array(i) :=  num(((i+1)*4 - 1),i*4).xorR
+  }
+  num_array.asUInt
+
 }
+def  branch_prediction_state_machine_code_decoder(code:UInt) :Bool  = {
+    MuxLookup(code,0.asUInt.asBool,Seq(
+        Strongly_Taken -> 1.U.asBool,
+        Strongly_Not_Taken -> 0.U.asBool,
+        Weakly_Not_Taken -> 0.U.asBool,
+        Weakly_Taken  -> 1.U.asBool))
+} 
+//branch prediction state machine code 
+val Strongly_Not_Taken = "b00".U
+val Strongly_Taken = "b11".U
+val Weakly_Not_Taken = "b01".U
+val Weakly_Taken = "b10".U
+
+}
+         

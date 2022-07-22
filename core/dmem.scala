@@ -60,7 +60,7 @@ class dmem extends Module with mips_macros {//hi = Input(UInt(32.W))lo寄存器
         3.U -> true_data )),0.U)
     
 }
-object dmem_test extends App{
-    (new ChiselStage).emitVerilog(new dmem)
-}
+// object dmem_test extends App{
+//     (new ChiselStage).emitVerilog(new dmem)
+// }
 

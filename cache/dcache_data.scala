@@ -39,8 +39,8 @@ class dcache_data  extends Module with mips_macros {
 
 
 }
-object dcache_data_test extends App{
-    (new ChiselStage).emitVerilog(new dcache_data)
-}
+// object dcache_data_test extends App{
+//     (new ChiselStage).emitVerilog(new dcache_data)
+// }
 
 

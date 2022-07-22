@@ -61,7 +61,7 @@ class alu extends Module with mips_macros {
     ))
     io.overflow := (io.ctrl(ALU_ADDE) && (answer_add(32) =/= answer_add(31))) || (io.ctrl(ALU_SUBE) && (answer_sub(32) =/= answer_sub(31)))
 }
-object alu_test extends App{
-    (new ChiselStage).emitVerilog(new alu)
-}
+// object alu_test extends App{
+//     (new ChiselStage).emitVerilog(new alu)
+// }
 
