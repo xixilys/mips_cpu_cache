@@ -64,7 +64,7 @@ class dmemreq extends Module with mips_macros {//hi = Input(UInt(32.W))lo寄存�
 
 }
 
-object dmemreq_test extends App{
-    (new ChiselStage).emitVerilog(new dmemreq)
-}
+// object dmemreq_test extends App{
+//     (new ChiselStage).emitVerilog(new dmemreq)
+// }
 

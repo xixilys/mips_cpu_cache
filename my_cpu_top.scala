@@ -339,10 +339,16 @@ withClockAndReset(clk.asClock,(~aresetn).asAsyncReset) {
     icache.sram_req         := u_mips_cpu.inst_req
     icache.sram_wr          := u_mips_cpu.inst_wr
     icache.sram_wdata       := u_mips_cpu.inst_wdata
-    u_mips_cpu.inst_rdata   := icache.sram_rdata
+    u_mips_cpu.inst_rdata_L   := icache.sram_rdata_L
+    u_mips_cpu.inst_rdata_M   := icache.sram_rdata_M
+    u_mips_cpu.inst_rdata_R   := icache.sram_rdata_R
     u_mips_cpu.inst_addr_ok := icache.sram_addr_ok
     u_mips_cpu.inst_data_ok := icache.sram_data_ok
     u_mips_cpu.inst_hit  := icache_first.sram_hit
+    u_mips_cpu.inst_valid := icache.sram_data_valid
+  //  u_mips_cpu.inst_cache_working_on := icache_first.cache_working_on    
+    u_mips_cpu.inst_write_en := icache.sram_write_en    
+
 
     debug_wb_pc             := u_mips_cpu.debug_wb_pc
     debug_wb_rf_wdata       := u_mips_cpu.debug_wb_rf_wdata
@@ -351,7 +357,7 @@ withClockAndReset(clk.asClock,(~aresetn).asAsyncReset) {
     u_mips_cpu.clk          := clk
     u_mips_cpu.resetn       := aresetn
     u_mips_cpu.ext_int      := ext_int
-     
+    u_mips_cpu.stage2_stall      := icache_first.stage2_stall   
 
     u_axi_cache_bridge.io.aclk             := clk       
     u_axi_cache_bridge.io.aresetn          := aresetn
@@ -393,6 +399,8 @@ withClockAndReset(clk.asClock,(~aresetn).asAsyncReset) {
     u_axi_cache_bridge.io.s_axi_arprot     := Cat(dcache.arprot,icache.arprot)
     u_axi_cache_bridge.io.s_axi_arqos      := Cat(0.U(4.W),0.U(4.W))
     u_axi_cache_bridge.io.s_axi_arvalid    := Cat(dcache.arvalid,icache.arvalid)
+
+    icache_first.stage2_flush := u_mips_cpu.stage2_flush
     
     dcache.arready            := u_axi_cache_bridge.io.s_axi_arready(1)
     icache.arready            := u_axi_cache_bridge.io.s_axi_arready(0)
@@ -451,6 +459,10 @@ withClockAndReset(clk.asClock,(~aresetn).asAsyncReset) {
     u_axi_cache_bridge.io.m_axi_rlast  :=    rlast
     u_axi_cache_bridge.io.m_axi_rvalid :=    rvalid
     rready              := u_axi_cache_bridge.io.m_axi_rready     
+
+    icache_first.stage1_valid_flush := u_mips_cpu.stage1_valid_flush
+    icache_first.inst_ready_to_use := u_mips_cpu.inst_ready_to_use
+    icache_first.inst_buffer_full   := u_mips_cpu.inst_buffer_full
 
 
 }}

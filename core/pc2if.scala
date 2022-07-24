@@ -108,7 +108,7 @@ class pc2if extends Module {
  
 }
 
-object pc2if_test extends App{
-    (new ChiselStage).emitVerilog(new pc2if )
-}
+// object pc2if_test extends App{
+//     (new ChiselStage).emitVerilog(new pc2if )
+// }
 

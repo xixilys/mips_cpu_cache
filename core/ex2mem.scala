@@ -163,7 +163,7 @@ class ex2mem extends Module with mips_macros {//
 
 
 }
-object ex2mem_test extends App{
-    (new ChiselStage).emitVerilog(new ex2mem)
-}
+// object ex2mem_test extends App{
+//     (new ChiselStage).emitVerilog(new ex2mem)
+// }
 

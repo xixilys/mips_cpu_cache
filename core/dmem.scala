@@ -33,7 +33,7 @@ class dmem extends Module with mips_macros {//hi = Input(UInt(32.W))lo寄存器
     val data_ok_reg = RegInit(0.U(1.W))
     data_ok_reg := io.data_ok
     val rdata_reg = RegInit(0.U(32.W))
-    rdata_reg := io.rdata
+    rdata_reg := Mux(io.data_ok.asBool,io.rdata,rdata_reg)
 
     def get_byte(data:UInt,offset:UInt,sign:UInt):UInt = MuxLookup(Cat(offset,sign),0.U,Seq(
         "b00_1".U -> sign_extend(data(7,0),8),
@@ -51,16 +51,16 @@ class dmem extends Module with mips_macros {//hi = Input(UInt(32.W))lo寄存器
         "b10_1".U -> sign_extend(data(31,16),16),
         "b10_0".U -> unsign_extend(data(31,16),16)))
 
-    val true_data = Mux(pending_reg.asBool,rdata_reg,io.rdata) //；为了满足cache命中，一周期读取完的要求，并且未命中可以接上cache的那边的时序
+    val true_data = Mux(io.data_ok.asBool,io.rdata,rdata_reg) //；为了满足cache命中，一周期读取完的要求，并且未命中可以接上cache的那边的时序
 
     val all_ok = (data_ok_reg.asBool && io.ReadEn.asBool)
-    io.RD := Mux(all_ok,MuxLookup(io.WIDTH,0.U,Seq(
+    io.RD := Mux(all_ok || 1.U.asBool,MuxLookup(io.WIDTH,0.U,Seq(
         1.U -> get_byte(true_data,ra,io.SIGN),
         2.U -> get_halfword(true_data,ra,io.SIGN),//有符号扩展或者无符号扩展
         3.U -> true_data )),0.U)
     
 }
-object dmem_test extends App{
-    (new ChiselStage).emitVerilog(new dmem)
-}
+// object dmem_test extends App{
+//     (new ChiselStage).emitVerilog(new dmem)
+// }
 

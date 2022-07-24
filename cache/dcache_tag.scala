@@ -27,8 +27,8 @@ class dcache_tag  extends Module with mips_macros {
     io.valid := tag_t(20) //tag_t(20)run
     io.hit := Mux(tag_t(19,0) === io.addr(31,12),1.U,0.U)//addr前20位全为tag
 }
-object dcache_tag_test extends App{
-    (new ChiselStage).emitVerilog(new dcache_tag)
-}
+// object dcache_tag_test extends App{
+//     (new ChiselStage).emitVerilog(new dcache_tag)
+// }
 
 

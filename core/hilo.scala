@@ -28,8 +28,8 @@ class hilo extends Module with mips_macros {//hi,lo寄存器
 }
 
 
-object hilo_test extends App{
-    (new ChiselStage).emitVerilog(new hilo)
-}
+// object hilo_test extends App{
+//     (new ChiselStage).emitVerilog(new hilo)
+// }
 
 

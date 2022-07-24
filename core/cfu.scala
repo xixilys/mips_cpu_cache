@@ -10,6 +10,7 @@ class cfu extends Module with mips_macros {
     val io = IO(new Bundle { 
         val     AddrPendingF = Input(UInt(1.W))
         val     DataPendingF = Input(UInt(1.W))
+        val     Inst_Fifo_Empty = Input(UInt(1.W))
 
         
         val     BranchD = Input(UInt(6.W))
@@ -22,7 +23,7 @@ class cfu extends Module with mips_macros {
         val     AddrPendingE = Input(UInt(1.W))
         val     DataPendingM = Input(UInt(1.W))
         
-        val     InExceptionF = Input(UInt(1.W))
+        val     InException = Input(UInt(1.W))
         val     MemRLE       = Input(UInt(2.W))
 
         val     WriteRegE = Input(UInt(5.W))
@@ -95,7 +96,7 @@ class cfu extends Module with mips_macros {
     
 
     io.ForwardAE := Mux(io.RsE =/= 0.U && io.RsE === io.WriteRegM && io.RegWriteM.asBool && !io.MemToRegM.asBool,"b10".U,Mux(
-        io.RsE =/= 0.U && io.RsE === io.WriteRegW && io.RegWriteW.asBool && !io.MemToRegM.asBool,"b01".U,0.U))
+        io.RsE =/= 0.U && io.RsE === io.WriteRegW && io.RegWriteW.asBool && !io.MemToRegM.asBool,"b01".U,0.U)) //关闭所有与cache有关的前递
 
     io.ForwardBE := Mux(io.RtE =/= 0.U && io.RtE === io.WriteRegM && io.RegWriteM.asBool && !io.MemToRegM.asBool,"b10".U,Mux(
         io.RtE =/= 0.U && io.RtE === io.WriteRegW && io.RegWriteW.asBool && !io.MemToRegM.asBool,"b01".U,0.U))
@@ -108,13 +109,13 @@ class cfu extends Module with mips_macros {
 //感觉lm stall不是很有用，直接exe阶段前递就可以了来着
     //val lm_Stall = (io.RsD === io.RtE || io.RtD === io.RtE) && io.MemToRegE.asBool // Rs与Rt为操作数并且其中有一个是需要访存的时候读的，就得让流水线停止，等到数据读完（）
     
-    
+    val fifo_empty_stall = io.Inst_Fifo_Empty.asBool
     val br_Stall = (io.CanBranchD.asBool && (io.BranchD =/= 0.U) && 
         ((io.RegWriteE.asBool && (io.WriteRegE === io.RsD || io.WriteRegE === io.RtD)) || //直接要写的寄存器和冲突了
-        (io.MemToRegM.asBool && (io.WriteRegM === io.RsD || io.WriteRegM === io.RtD)))) && !io.InExceptionF.asBool //需要从mem读的寄存器冲突了
+        (io.MemToRegM.asBool && (io.WriteRegM === io.RsD || io.WriteRegM === io.RtD)))) && !io.InException.asBool //需要从mem读的寄存器冲突了
     val jr_Stall = (io.JumpD.asBool && io.JRD.asBool) && 
         ((io.RegWriteE.asBool && (io.WriteRegE === io.RsD || io.WriteRegE === io.RtD)) || //直接要写的寄存器和冲突了
-        (io.MemToRegM.asBool && (io.WriteRegM === io.RsD || io.WriteRegM === io.RtD)))  && !io.InExceptionF.asBool //需要从mem读的寄存器冲突了
+        (io.MemToRegM.asBool && (io.WriteRegM === io.RsD || io.WriteRegM === io.RtD)))  && !io.InException.asBool //需要从mem读的寄存器冲突了
     val divStall = io.DivPendingE.asBool//除法需要计算很多个时钟周期
     val cp0Stall = (io.CP0WriteM.asBool && io.CP0ToRegE.asBool ) || (io.CP0WriteW.asBool && io.CP0ToRegE.asBool )
     val ifStall = io.AddrPendingF.asBool 
@@ -130,22 +131,22 @@ class cfu extends Module with mips_macros {
 
 
     val has_Stall = /*lm_Stall ||*/br_Stall||jr_Stall||divStall.asBool||cp0Stall ||ifStall||dmemStall
-    val excepStall = io.InExceptionF.asBool && has_Stall
-    val excepFlush = io.InExceptionF.asBool && !has_Stall
+    val excepStall = io.InException.asBool && has_Stall
+    val excepFlush = io.InException.asBool 
  //Stall 摊位，池子
-    io.StallF := Mux(reset.asBool,1.U,!(/*lm_Stall||*/br_Stall||jr_Stall||divStall||cp0Stall||dmemStall/*||excepStall*/||memrlStall||mem2regM_Stall))
-    io.StallD := Mux(reset.asBool,1.U,!(/*lm_Stall||*/br_Stall||jr_Stall||divStall||cp0Stall||dmemStall||excepStall||ifStall||memrlStall||io.DataPendingF.asBool || mem2regM_Stall))
-    io.StallE := Mux(reset.asBool,1.U,!(divStall||cp0Stall||dmemStall||excepStall || mem2regM_Stall))
-    io.StallM := Mux(reset.asBool,1.U,!(divStall||dmemStall||excepStall))
-    io.StallW := Mux(reset.asBool,1.U,!(excepStall))
+    io.StallF := Mux(reset.asBool,1.U,!(/*lm_Stall||*/br_Stall||jr_Stall||divStall||cp0Stall||dmemStall/*||excepStall*/||memrlStall||mem2regM_Stall || fifo_empty_stall))
+    io.StallD := Mux(reset.asBool,1.U,!(/*lm_Stall||*/br_Stall||jr_Stall||divStall||cp0Stall||dmemStall/*||excepStall*/||memrlStall || mem2regM_Stall))
+    io.StallE := Mux(reset.asBool,1.U,!(divStall||cp0Stall||dmemStall/*||excepStall*/ || mem2regM_Stall))
+    io.StallM := Mux(reset.asBool,1.U,!(divStall||dmemStall/*||excepStall*/))
+    io.StallW := Mux(reset.asBool,1.U,!(0.U/*excepStall*/))
 //flush冲洗
-    io.FlushD := Mux(reset.asBool,0.U, excepFlush)
-    io.FlushE := Mux(reset.asBool,0.U,((io.StallE.asBool && ( ifStall ||br_Stall|| jr_Stall ||memrlStall /*||| lm_Stall | br_Stall || jr_Stall */||io.DataPendingF.asBool  )))|| excepFlush)
+    io.FlushD := Mux(reset.asBool,0.U, io.StallD.asBool &&( excepFlush /*|| fifo_empty_stall*/ ))
+    io.FlushE := Mux(reset.asBool,0.U,((io.StallE.asBool && ( ifStall ||br_Stall|| jr_Stall ||memrlStall /*||| lm_Stall | br_Stall || jr_Stall */  )))|| excepFlush)
     io.FlushM := Mux(reset.asBool,0.U,((io.StallM.asBool && ( cp0Stall || divStall ||mem2regM_Stall.asBool)) || excepFlush))
     io.FlushW := Mux(reset.asBool,0.U,((io.StallW.asBool && ( dmemStall || excepFlush))|| divStall))
 
 }
 
-object cfu_test extends App{
-    (new ChiselStage).emitVerilog(new cfu)
-}
+// object cfu_test extends App{
+//     (new ChiselStage).emitVerilog(new cfu)
+// }

@@ -141,7 +141,7 @@ class cp0 extends Module with mips_macros {//hi = Input(UInt(32.W))lo寄存器
 
 }
 
-object cp0_test extends App{
-    (new ChiselStage).emitVerilog(new cp0)
-}
+// object cp0_test extends App{
+//     (new ChiselStage).emitVerilog(new cp0)
+// }
 

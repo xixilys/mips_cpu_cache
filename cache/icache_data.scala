@@ -39,8 +39,8 @@ class icache_data  extends Module with mips_macros {
 
 
 }
-object icache_data_test extends App{
-    (new ChiselStage).emitVerilog(new icache_data)
-}
+// object icache_data_test extends App{
+//     (new ChiselStage).emitVerilog(new icache_data)
+// }
 
 
