@@ -1,0 +1,50 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec([A, Some(89ea758d-52d6-40fc-b1f4-bef28015378c), Some(CommandSource(console0)))[0m
+[0m[[0m[31merror[0m] [0m[0mExpected letter[0m
+[0m[[0m[31merror[0m] [0m[0mExpected symbol[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '+'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '++'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'java++'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'java+'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '^'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '^^'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '+-'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'debug'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'info'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'warn'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'error'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'addPluginSbtFile'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'sbtRebootNetwork'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'show'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'print'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'all'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'Global'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '*'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'Zero'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'ThisBuild'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'ProjectRef('[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '{'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected project ID[0m
+[0m[[0m[31merror[0m] [0m[0mExpected configuration[0m
+[0m[[0m[31merror[0m] [0m[0mExpected configuration ident[0m
+[0m[[0m[31merror[0m] [0m[0mExpected key[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '__disconnectNetworkChannel'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '__waitWatch'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'sbtPromptChannel'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected end of input.[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'sbtRebootImpl'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'early('[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '-'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '--'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '!'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'sbtReportResult'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'sbtMapExec'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected 'sbtCompleteExec'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '__failWatch'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '__preWatch'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '__postWatch'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '__runWatch'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '__stopWatch'[0m
+[0m[[0m[31merror[0m] [0m[0m[A[0m
+[0m[[0m[31merror[0m] [0m[0m^[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
+[0m[[0m[0minfo[0m] [0m[0mshutting down sbt server[0m

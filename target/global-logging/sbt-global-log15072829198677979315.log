@@ -1,0 +1,11 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(testOnly fifo_test, Some(f465a4d3-aaf1-4ff5-818e-a5eff7f1b7f3), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Test / testOnly[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 4 Scala sources to /data/longxin/learning/ic_design/chisel-template/target/scala-2.13/classes ...[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/mips_cpu_2nd/core/my_cpu.scala:176:41: not found: type cu[0m
+[0m[[0m[31merror[0m] [0m[0mval cu_decoder = Seq.fill(2)(Module(new cu)) // 两个解码模块[0m
+[0m[[0m[31merror[0m] [0m[0m                                        ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
+[0m[[0m[31merror[0m] [0m[0m(Compile / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 2 s, completed 2022年7月13日 下午2:05:28[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

@@ -1,0 +1,11 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(run, Some(6192f376-cb20-456f-9f14-c3791587538b), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 2 Scala sources to /data/longxin/learning/ic_design/nscscc_2022_perf/target/scala-2.13/classes ...[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/nscscc_2022_perf/src/main/scala/mips_cpu_cache/cache/inst_cache.scala:148:37: value stage is not a member of chisel3.Bool[0m
+[0m[[0m[31merror[0m] [0m[0m        Mux(io.stage1_valid_flush(1)stage,2.U,stage1_sram_valid)))[0m
+[0m[[0m[31merror[0m] [0m[0m                                    ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
+[0m[[0m[31merror[0m] [0m[0m(Compile / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 0 s, completed 2022年8月6日 上午10:25:13[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

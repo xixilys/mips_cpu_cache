@@ -1,0 +1,3 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(resumeFromFailure, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
+[0m[[0m[31merror[0m] [0m[0mserver failed to start on local:///home/ddddddd/.sbt/1.0/server/e45b9b1605f448dc6364/sock. java.io.IOException: org.scalasbt.ipcsocket.NativeErrorException: [98] Address already in use[0m

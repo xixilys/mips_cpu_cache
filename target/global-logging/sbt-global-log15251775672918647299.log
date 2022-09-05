@@ -1,0 +1,6 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(run, Some(f0024fb2-459d-40ec-8b82-6c9726c649e4), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /data/longxin/learning/ic_design/nscscc_2022_perf/target/scala-2.13/classes ...[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 9 s, completed 2022年8月11日 下午10:04:18[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

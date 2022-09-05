@@ -1,0 +1,13 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(run, Some(0ffe1e48-3d38-4dcc-bdaf-9a4e0f766bf0), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /data/longxin/learning/ic_design/nscscc_2022_perf/target/scala-2.13/classes ...[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/nscscc_2022_perf/src/main/scala/mips_cpu_cache/core/cu.scala:229:51: type mismatch;[0m
+[0m[[0m[31merror[0m] [0m[0m found   : String("b000000_11111_11101_00000")[0m
+[0m[[0m[31merror[0m] [0m[0m required: chisel3.UInt[0m
+[0m[[0m[31merror[0m] [0m[0m    io1.commit_cache_ins := io1.InstrD(31,11) === "b000000_11111_11101_00000"//ins_id === ID_CACHE.U[0m
+[0m[[0m[31merror[0m] [0m[0m                                                  ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
+[0m[[0m[31merror[0m] [0m[0m(Compile / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 0 s, completed 2022年8月11日 下午10:04:03[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

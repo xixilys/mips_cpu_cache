@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="scala">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/main/scala/mips_cpu_6_25_withcache_scroe_51.zip!/" />
+      <root url="jar://$PROJECT_DIR$/main/scala/mips_cpu_6.23.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,26 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(test, Some(9f930020-d101-4adb-a456-6ac7d4b4fe8c), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Test / test[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /data/longxin/learning/ic_design/chisel-template/target/scala-2.13/test-classes ...[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:56:36: not found: value until[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io.inst_issue_addr(until).poke((simuque.size - addr -1 ).U)[0m
+[0m[[0m[31merror[0m] [0m[0m                                   ^[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:77:23: not found: value until[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io_in(until).psc_src1.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:78:23: not found: value until[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io_in(until).psc_src2.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:79:23: not found: value until[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io_in(until).psc_dest.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:80:23: not found: value until[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io_in(until).ready.poke(0.U.asBool)[0m
+[0m[[0m[31merror[0m] [0m[0m                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:81:23: not found: value until[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io_in(until).opcode.poke(in.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                      ^[0m
+[0m[[0m[31merror[0m] [0m[0m6 errors found[0m
+[0m[[0m[31merror[0m] [0m[0m(Test / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 0 s, completed 2022年7月13日 下午10:54:34[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

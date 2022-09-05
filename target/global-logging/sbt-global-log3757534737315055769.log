@@ -1,0 +1,14 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(run, Some(70008a15-f024-406d-ada0-59bd866c464d), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /data/longxin/learning/ic_design/nscscc_2022_perf/target/scala-2.13/classes ...[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/nscscc_2022_perf/src/main/scala/mips_cpu_cache/cache/inst_cache.scala:94:5: not found: value icache_reg_0[0m
+[0m[[0m[31merror[0m] [0m[0m    icache_reg_0.asid := io.cp0_asid[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/nscscc_2022_perf/src/main/scala/mips_cpu_cache/cache/inst_cache.scala:96:5: not found: value icache_reg_1[0m
+[0m[[0m[31merror[0m] [0m[0m    icache_reg_1.asid := io.cp0_asid[0m
+[0m[[0m[31merror[0m] [0m[0m    ^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
+[0m[[0m[31merror[0m] [0m[0m(Compile / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 0 s, completed 2022年8月13日 下午3:19:40[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

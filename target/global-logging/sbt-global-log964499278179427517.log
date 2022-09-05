@@ -1,0 +1,25 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(test, Some(f6041a73-e288-4a0b-92f9-7f321c1e4b87), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Test / test[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /data/longxin/learning/ic_design/chisel-template/target/scala-2.13/classes ...[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/npc_code/EXU.scala:18:41: method copyArrayToImmutableIndexedSeq in class LowPriorityImplicits2 is deprecated (since 2.13.0): Implicit conversions from Array to immutable.IndexedSeq are implemented by copying; Use the more efficient non-copying ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call[0m
+[0m[[0m[33mwarn[0m] [0m[0m    io.answer := MuxCase(0.U(64.W),Array([0m
+[0m[[0m[33mwarn[0m] [0m[0m                                        ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/npc_code/EXU.scala:49:74: method copyArrayToImmutableIndexedSeq in class LowPriorityImplicits2 is deprecated (since 2.13.0): Implicit conversions from Array to immutable.IndexedSeq are implemented by copying; Use the more efficient non-copying ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call[0m
+[0m[[0m[33mwarn[0m] [0m[0m    type_I_answer := Mux((io.exu_instype === 1.U),MuxCase(0.U(64.W),Array([0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                                         ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/npc_code/EXU.scala:67:95: method copyArrayToImmutableIndexedSeq in class LowPriorityImplicits2 is deprecated (since 2.13.0): Implicit conversions from Array to immutable.IndexedSeq are implemented by copying; Use the more efficient non-copying ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call[0m
+[0m[[0m[33mwarn[0m] [0m[0m    Riscv_Reg(io.exu_dest) := Mux((io.exu_enable === 1.U),MuxCase(Riscv_Reg(io.exu_dest),Array([0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                                                              ^[0m
+[0m[[0m[33mwarn[0m] [0m[0mthree warnings found[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /data/longxin/learning/ic_design/chisel-template/target/scala-2.13/test-classes ...[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:15:14: '=' expected but identifier found.[0m
+[0m[[0m[31merror[0m] [0m[0m  def Double MyRandom()[0m
+[0m[[0m[31merror[0m] [0m[0m             ^[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:16:1: illegal start of simple expression[0m
+[0m[[0m[31merror[0m] [0m[0m  {[0m
+[0m[[0m[31merror[0m] [0m[0m^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
+[0m[[0m[31merror[0m] [0m[0m(Test / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 1 s, completed 2022年7月14日 下午4:46:37[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

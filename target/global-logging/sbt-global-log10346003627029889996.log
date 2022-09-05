@@ -1,0 +1,34 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(run, Some(56fe8b30-2aff-4889-a178-7aedf9b7245a), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Compile / run[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 70 Scala sources to /data/longxin/learning/ic_design/chisel-template/target/scala-2.13/classes ...[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/mips_cpu/core/cu.scala:132:51: method copyArrayToImmutableIndexedSeq in class LowPriorityImplicits2 is deprecated (since 2.13.0): Implicit conversions from Array to immutable.IndexedSeq are implemented by copying; Use the more efficient non-copying ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call[0m
+[0m[[0m[33mwarn[0m] [0m[0m        ( OP_BRANCH) -> MuxCase(1.U<<ID_NULL,Array( //后面这里可以改,在id时就开始算分支[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                  ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/mips_cpu/core/cu.scala:138:54: method copyArrayToImmutableIndexedSeq in class LowPriorityImplicits2 is deprecated (since 2.13.0): Implicit conversions from Array to immutable.IndexedSeq are implemented by copying; Use the more efficient non-copying ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call[0m
+[0m[[0m[33mwarn[0m] [0m[0m        ( OP_PRIVILEGE) -> MuxCase(1.U<<ID_NULL,Array( //后面这里可以改,在id时就开始算分支[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                     ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/mips_cpu/core/cu.scala:393:51: method copyArrayToImmutableIndexedSeq in class LowPriorityImplicits2 is deprecated (since 2.13.0): Implicit conversions from Array to immutable.IndexedSeq are implemented by copying; Use the more efficient non-copying ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call[0m
+[0m[[0m[33mwarn[0m] [0m[0m        ( OP_PRIVILEGE) -> MuxCase(ID_NULL.U,Array( //后面这里可以改,在id时就开始算分支[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                  ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/npc_code/EXU.scala:18:41: method copyArrayToImmutableIndexedSeq in class LowPriorityImplicits2 is deprecated (since 2.13.0): Implicit conversions from Array to immutable.IndexedSeq are implemented by copying; Use the more efficient non-copying ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call[0m
+[0m[[0m[33mwarn[0m] [0m[0m    io.answer := MuxCase(0.U(64.W),Array([0m
+[0m[[0m[33mwarn[0m] [0m[0m                                        ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/npc_code/EXU.scala:49:74: method copyArrayToImmutableIndexedSeq in class LowPriorityImplicits2 is deprecated (since 2.13.0): Implicit conversions from Array to immutable.IndexedSeq are implemented by copying; Use the more efficient non-copying ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call[0m
+[0m[[0m[33mwarn[0m] [0m[0m    type_I_answer := Mux((io.exu_instype === 1.U),MuxCase(0.U(64.W),Array([0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                                         ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/npc_code/EXU.scala:67:95: method copyArrayToImmutableIndexedSeq in class LowPriorityImplicits2 is deprecated (since 2.13.0): Implicit conversions from Array to immutable.IndexedSeq are implemented by copying; Use the more efficient non-copying ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call[0m
+[0m[[0m[33mwarn[0m] [0m[0m    Riscv_Reg(io.exu_dest) := Mux((io.exu_enable === 1.U),MuxCase(Riscv_Reg(io.exu_dest),Array([0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                                                              ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/npc_code/EXU.scala:8:7: Generated class examples.Alu differs only in case from examples.alu (defined in alu.scala).[0m
+[0m[[0m[33mwarn[0m] [0m[0m  Such classes will overwrite one another on case-insensitive filesystems.[0m
+[0m[[0m[33mwarn[0m] [0m[0mclass Alu extends Module {//only decode  the instruction whith the input pc[0m
+[0m[[0m[33mwarn[0m] [0m[0m      ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/main/scala/npc_code/EXU.scala:10:21: Generated class examples.Alu$$anon$1 differs only in case from examples.alu$$anon$1 (defined in alu.scala).[0m
+[0m[[0m[33mwarn[0m] [0m[0m  Such classes will overwrite one another on case-insensitive filesystems.[0m
+[0m[[0m[33mwarn[0m] [0m[0m    val io = IO(new Bundle { //有隐式的时钟与复位，并且复位为高电平复位[0m
+[0m[[0m[33mwarn[0m] [0m[0m                    ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m8 warnings found[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 21 s, completed 2022年7月20日 下午9:15:39[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0mForcing garbage collection...[0m

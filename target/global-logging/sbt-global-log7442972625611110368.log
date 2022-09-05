@@ -1,0 +1,15 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(test, Some(7a28250e-de42-4fcd-99fa-2224b7ebd7a3), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Test / test[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 4 Scala sources to /media/ddddddd/40d0728b-21f5-4125-bf84-4d623a60d871/ddddddd/Documents/Xilinx_FPGA/chisel-template/target/scala-2.13/classes ...[0m
+[0m[[0m[31merror[0m] [0m[0m/media/ddddddd/40d0728b-21f5-4125-bf84-4d623a60d871/ddddddd/Documents/Xilinx_FPGA/chisel-template/src/main/scala/mips_cpu/core/mips_top.scala:61:25: not enough arguments for method Mux2_4: (sel: chisel3.UInt, ch0: chisel3.UInt, ch1: chisel3.UInt, ch2: chisel3.UInt, ch3: chisel3.UInt): chisel3.UInt.[0m
+[0m[[0m[31merror[0m] [0m[0mUnspecified value parameters sel, ch0, ch1...[0m
+[0m[[0m[31merror[0m] [0m[0m    val Pc_Next = Mux2_4()[0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
+[0m[[0m[0mdebug[0m] [0m[0mForcing garbage collection...[0m
+[0m[[0m[31merror[0m] [0m[0m(Compile / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 4 s, completed May 15, 2022, 2:52:38 PM[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0mForcing garbage collection...[0m
+[0m[[0m[0minfo[0m] [0m[0mshutting down sbt server[0m

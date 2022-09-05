@@ -1,0 +1,9 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(RUN, Some(949b9f5d-103e-46b6-b9d5-64b95603da71), Some(CommandSource(console0)))[0m
+[0m[[0m[31merror[0m] [0m[0mNot a valid command: RUN[0m
+[0m[[0m[31merror[0m] [0m[0mNot a valid project ID: RUN[0m
+[0m[[0m[31merror[0m] [0m[0mExpected ':'[0m
+[0m[[0m[31merror[0m] [0m[0mExpected '/'[0m
+[0m[[0m[31merror[0m] [0m[0mNot a valid key: RUN (similar: run, bgRun, fgRun)[0m
+[0m[[0m[31merror[0m] [0m[0mRUN[0m
+[0m[[0m[31merror[0m] [0m[0m   ^[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

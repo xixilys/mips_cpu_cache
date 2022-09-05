@@ -1,0 +1,4 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(resumeFromFailure, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
+[0m[[0m[0minfo[0m] [0m[0msbt server started at local:///home/ddddddd/.sbt/1.0/server/e45b9b1605f448dc6364/sock[0m
+[0m[[0m[0minfo[0m] [0m[0mstarted sbt server[0m

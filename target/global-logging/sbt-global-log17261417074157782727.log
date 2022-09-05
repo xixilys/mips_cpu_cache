@@ -1,0 +1,46 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(test, Some(ab143a24-4d13-41c6-a8a5-8c513378d070), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Test / test[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /home/ddddddd/learning/ic_design/chisel-template/target/scala-2.13/classes ...[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 6 Scala sources to /home/ddddddd/learning/ic_design/chisel-template/target/scala-2.13/test-classes ...[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:132:26: value psc_src1 is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io_in(j).psc_src1.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:133:26: value psc_src2 is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io_in(j).psc_src2.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:134:26: value psc_dest is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io_in(j).psc_dest.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:135:26: value ready is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io_in(j).ready.poke(0.U.asBool)[0m
+[0m[[0m[31merror[0m] [0m[0m                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:136:26: value opcode is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m            dut.io_in(j).opcode.poke(in.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:142:28: value psc_src1 is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m              dut.io_in(j).psc_src1.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:143:28: value psc_src2 is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m              dut.io_in(j).psc_src2.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:144:28: value psc_dest is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m              dut.io_in(j).psc_dest.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:145:28: value ready is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m              dut.io_in(j).ready.poke(0.U.asBool)[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:146:28: value opcode is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m              dut.io_in(j).opcode.poke(0.U)[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:155:49: value opcode is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m          println("Actual POP " + dut.io_out(j).opcode.peek().toString)[0m
+[0m[[0m[31merror[0m] [0m[0m                                                ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ddddddd/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:156:25: value opcode is not a member of mips_cpu_2nd.decoder_port[0m
+[0m[[0m[31merror[0m] [0m[0m          dut.io_out(j).opcode.expect(expectpop(j).U)[0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m12 errors found[0m
+[0m[[0m[0mdebug[0m] [0m[0mForcing garbage collection...[0m
+[0m[[0m[31merror[0m] [0m[0m(Test / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 1 s, completed Jul 14, 2022, 11:12:20 PM[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m

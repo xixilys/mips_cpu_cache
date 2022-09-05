@@ -1,0 +1,9 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(clear, Some(be74d250-41f2-492e-a0bd-6bbf207cbdb0), Some(CommandSource(console0)))[0m
+[0m[[0m[31merror[0m] [0m[0mNot a valid command: clear (similar: clearCaches, client, last)[0m
+[0m[[0m[31merror[0m] [0m[0mNot a valid project ID: clear[0m
+[0m[[0m[31merror[0m] [0m[0mExpected ':'[0m
+[0m[[0m[31merror[0m] [0m[0mNot a valid key: clear (similar: clean, cleanIvy, compileEarly)[0m
+[0m[[0m[31merror[0m] [0m[0mclear[0m
+[0m[[0m[31merror[0m] [0m[0m     ^[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
+[0m[[0m[0minfo[0m] [0m[0mshutting down sbt server[0m

@@ -1,0 +1,12 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(test, Some(276d4565-588e-4148-b475-df151f854c29), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Test / test[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0mcompiling 1 Scala source to /data/longxin/learning/ic_design/chisel-template/target/scala-2.13/test-classes ...[0m
+[0m[[0m[31merror[0m] [0m[0m/data/longxin/learning/ic_design/chisel-template/src/test/scala/mips_cpu_2nd/issuefifo_test.scala:57:28: value io_out is not a member of chisel3.Bundle{val inst_write: chisel3.UInt; val inst_issue_num: chisel3.UInt; val inst_issue_addr: chisel3.Vec[chisel3.UInt]; val full: chisel3.Bool; val ready_en: chisel3.Vec[chisel3.Bool]}[0m
+[0m[[0m[31merror[0m] [0m[0m            println(dut.io.io_out(j).opcode.peek().toString)[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
+[0m[[0m[31merror[0m] [0m[0m(Test / [31mcompileIncremental[0m) Compilation failed[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 2 s, completed 2022年7月13日 下午11:00:23[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
+[0m[[0m[0minfo[0m] [0m[0mshutting down sbt server[0m

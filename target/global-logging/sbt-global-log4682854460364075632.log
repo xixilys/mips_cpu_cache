@@ -1,0 +1,18 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(test, Some(fcb4ce4f-3c1d-418e-ba1a-540b4c2e31c5), Some(CommandSource(console0)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: Test / test[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mGCDSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- Gcd should calculate proper greatest common denominator[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mfifo_test:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- DUt pass is hxz shabi *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  io_read_out_0=0 (0x0) did not equal expected=264241156 (0xfc00004) (lines in fifo_test.scala: 22, 20) (fifo_test.scala:35)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 1 second, 787 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 2[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 2, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 1, failed 1, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m*** 1 TEST FAILED ***[0m[0m
+[0m[[0m[31merror[0m] [0m[0mFailed tests:[0m
+[0m[[0m[31merror[0m] [0m[0m	mips_cpu_2nd.fifo_test[0m
+[0m[[0m[31merror[0m] [0m[0m(Test / [31mtest[0m) sbt.TestsFailedException: Tests unsuccessful[0m
+[0m[[0m[31merror[0m] [0m[0mTotal time: 2 s, completed 2022年7月13日 下午2:15:32[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
