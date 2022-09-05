@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="core">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/main/scala/mips_cpu_cache/core/mips_top_change_backup.zip!/" />
+      <root url="jar://$PROJECT_DIR$/main/scala/mips_cpu_cache/core/myCPU_22_5_27.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
